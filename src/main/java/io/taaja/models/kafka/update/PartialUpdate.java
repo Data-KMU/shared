@@ -31,4 +31,18 @@ public class PartialUpdate {
         return new ObjectMapper().writeValueAsString(this);
     }
 
+    public PartialUpdate(){}
+
+    public PartialUpdate(String id, AbstractActuatorUpdate abstractActuatorUpdate){
+        this.getActuators().put(id, abstractActuatorUpdate);
+    }
+
+    public PartialUpdate(String id, AbstractSensorUpdate abstractSensorUpdate){
+        this.getSensors().put(id, abstractSensorUpdate);
+    }
+
+    public PartialUpdate(String id, AbstractSamplerUpdate abstractSamplerUpdate){
+        this.getSamplers().put(id, abstractSamplerUpdate);
+    }
+
 }

@@ -24,8 +24,7 @@ public class Extension {
         }
     }
 
-    @Id
-    private String id;
+    private String uuid;
     private ExtensionType type;
 
 }
