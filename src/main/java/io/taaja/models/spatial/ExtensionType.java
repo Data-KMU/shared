@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ExtensionType {
 
-    Default("wifi"),
+    Default("default"),
     ExclusionZone("exclusionZone");
 
     private final String value;

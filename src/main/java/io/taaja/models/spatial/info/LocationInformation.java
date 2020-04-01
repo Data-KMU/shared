@@ -4,13 +4,10 @@ import lombok.Data;
 
 import java.util.*;
 
-import static java.util.Collections.sort;
-import static java.util.Comparator.naturalOrder;
-
 @Data
 public class LocationInformation {
 
-    private List<Extension> extensions;
+    private List<ExtensionIdentity> extensions;
 
     private float longitude;
     private float latitude;
@@ -24,7 +21,7 @@ public class LocationInformation {
         this.extensions = new ArrayList<>();
     }
 
-    public List<Extension> getExtensions(){
+    public List<ExtensionIdentity> getExtensions(){
         if(this.extensions != null){
             Collections.sort(this.extensions);
         }
