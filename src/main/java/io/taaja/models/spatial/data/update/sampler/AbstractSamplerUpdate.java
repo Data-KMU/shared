@@ -1,7 +1,7 @@
-package io.taaja.models.kafka.update.sampler;
+package io.taaja.models.spatial.data.update.sampler;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
-import io.taaja.models.kafka.update.AbstractUpdate;
+import io.taaja.models.spatial.data.update.AbstractUpdate;
 import lombok.Data;
 
 

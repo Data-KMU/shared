@@ -1,10 +1,10 @@
-package io.taaja.models.kafka.update;
+package io.taaja.models.spatial.data.update;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.taaja.models.kafka.update.actuator.AbstractActuatorUpdate;
-import io.taaja.models.kafka.update.sampler.AbstractSamplerUpdate;
-import io.taaja.models.kafka.update.sensor.AbstractSensorUpdate;
+import io.taaja.models.spatial.data.update.actuator.AbstractActuatorUpdate;
+import io.taaja.models.spatial.data.update.sampler.AbstractSamplerUpdate;
+import io.taaja.models.spatial.data.update.sensor.AbstractSensorUpdate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;

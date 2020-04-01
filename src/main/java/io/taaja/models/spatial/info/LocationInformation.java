@@ -1,10 +1,11 @@
-package io.taaja.models.zoning;
+package io.taaja.models.spatial.info;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
+import static java.util.Collections.sort;
+import static java.util.Comparator.naturalOrder;
 
 @Data
 public class LocationInformation {
@@ -22,4 +23,12 @@ public class LocationInformation {
         this.created = new Date();
         this.extensions = new ArrayList<>();
     }
+
+    public List<Extension> getExtensions(){
+        if(this.extensions != null){
+            Collections.sort(this.extensions);
+        }
+        return this.extensions;
+    }
+
 }

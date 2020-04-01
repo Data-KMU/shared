@@ -1,4 +1,4 @@
-package io.taaja.models.kafka.update;
+package io.taaja.models.spatial.data.update;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
