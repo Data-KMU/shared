@@ -2,13 +2,14 @@ package io.taaja.models.spatial;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ExtensionType {
-    Corridor("Corridor"),
-    Area("Area");
+public enum ExtensionBehaviour {
+
+    Default("default"),
+    ExclusionZone("exclusionZone");
 
     private final String value;
 
-    ExtensionType(String value) {
+    ExtensionBehaviour(String value) {
         this.value = value;
     }
 
