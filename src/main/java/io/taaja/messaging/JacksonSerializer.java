@@ -6,12 +6,17 @@ import org.apache.kafka.common.serialization.Serializer;
 
 @JBossLog
 public class JacksonSerializer implements Serializer {
+
+    private static ObjectMapper objectMapperInstance;
+
     @Override
     public byte[] serialize(String topic, Object data) {
         byte[] retVal = null;
-        ObjectMapper objectMapper = new ObjectMapper();
+        if(objectMapperInstance == null){
+            objectMapperInstance = new ObjectMapper();
+        }
         try {
-            retVal =  objectMapper.writeValueAsBytes(data);
+            retVal =  objectMapperInstance.writeValueAsBytes(data);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
