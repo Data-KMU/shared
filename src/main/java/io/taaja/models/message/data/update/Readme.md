@@ -1,0 +1,1 @@
+here are classes that are published to a topic for a partial update

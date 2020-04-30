@@ -1,4 +1,4 @@
-package io.taaja.models;
+package io.taaja.models.record.spatial;
 
 public class ExtensionPriority {
 

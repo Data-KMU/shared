@@ -1,12 +1,12 @@
-package io.taaja.models.spatial.data.update;
+package io.taaja.models.message.data.update;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.taaja.models.spatial.data.update.actuator.AbstractActuatorUpdate;
-import io.taaja.models.spatial.data.update.sampler.AbstractSamplerUpdate;
-import io.taaja.models.spatial.data.update.sensor.AbstractSensorUpdate;
-import lombok.Getter;
-import lombok.Setter;
+import io.taaja.models.message.KafkaMessage;
+import io.taaja.models.message.data.update.sensor.AbstractSensorUpdate;
+import io.taaja.models.message.data.update.actuator.AbstractActuatorUpdate;
+import io.taaja.models.message.data.update.sampler.AbstractSamplerUpdate;
+import lombok.Data;
 import lombok.SneakyThrows;
 
 import java.util.HashMap;
@@ -15,10 +15,9 @@ import java.util.Map;
 /**
  * used to create an partial update
  */
-@Getter
-@Setter
+@Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PartialUpdate {
+public class SpatialDataUpdate extends KafkaMessage {
 
     // entity id -> Data
     private Map<String, AbstractActuatorUpdate> actuators = new HashMap<>();
@@ -28,20 +27,20 @@ public class PartialUpdate {
     @SneakyThrows
     @Override
     public String toString(){
-        return new ObjectMapper().writeValueAsString(this);
+        return (new ObjectMapper()).writeValueAsString(this);
     }
 
-    public PartialUpdate(){}
+    public SpatialDataUpdate(){}
 
-    public PartialUpdate(String id, AbstractActuatorUpdate abstractActuatorUpdate){
+    public SpatialDataUpdate(String id, AbstractActuatorUpdate abstractActuatorUpdate){
         this.getActuators().put(id, abstractActuatorUpdate);
     }
 
-    public PartialUpdate(String id, AbstractSensorUpdate abstractSensorUpdate){
+    public SpatialDataUpdate(String id, AbstractSensorUpdate abstractSensorUpdate){
         this.getSensors().put(id, abstractSensorUpdate);
     }
 
-    public PartialUpdate(String id, AbstractSamplerUpdate abstractSamplerUpdate){
+    public SpatialDataUpdate(String id, AbstractSamplerUpdate abstractSamplerUpdate){
         this.getSamplers().put(id, abstractSamplerUpdate);
     }
 

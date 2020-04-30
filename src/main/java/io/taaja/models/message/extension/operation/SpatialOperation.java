@@ -1,12 +1,13 @@
-package io.taaja.models.spatial.operation;
+package io.taaja.models.message.extension.operation;
 
+import io.taaja.models.message.KafkaMessage;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
-public class SpatialOperation {
+public class SpatialOperation extends KafkaMessage {
 
     private String targetId;
     private OperationType operationType;

@@ -1,4 +1,4 @@
-package io.taaja.models.spatial.data.update.actuator;
+package io.taaja.models.message.data.update.actuator;
 
 import io.taaja.models.generic.Coordinates;
 import lombok.Data;

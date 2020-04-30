@@ -275,7 +275,7 @@ else
     fi
 fi
 ##########################################################################################
-# End of extensionIdentity
+# End of spatialIdentity
 ##########################################################################################
 
 export MAVEN_PROJECTBASEDIR=${MAVEN_BASEDIR:-"$BASE_DIR"}

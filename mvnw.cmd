@@ -152,7 +152,7 @@ if exist %WRAPPER_JAR% (
         echo Finished downloading %WRAPPER_JAR%
     )
 )
-@REM End of extensionIdentity
+@REM End of spatialIdentity
 
 @REM Provide a "standardized" way to retrieve the CLI args that will
 @REM work with both Windows and non-Windows executions.

@@ -1,4 +1,4 @@
-package io.taaja.messaging;
+package io.taaja.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.jbosslog.JBossLog;

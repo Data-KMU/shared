@@ -1,4 +1,4 @@
-package io.taaja.models.spatial.operation;
+package io.taaja.models.message.extension.operation;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
