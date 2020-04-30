@@ -3,9 +3,9 @@ package io.taaja.models.message.data.update;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.taaja.models.message.KafkaMessage;
-import io.taaja.models.message.data.update.sensor.AbstractSensorUpdate;
 import io.taaja.models.message.data.update.actuator.AbstractActuatorUpdate;
 import io.taaja.models.message.data.update.sampler.AbstractSamplerUpdate;
+import io.taaja.models.message.data.update.sensor.AbstractSensorUpdate;
 import lombok.Data;
 import lombok.SneakyThrows;
 
