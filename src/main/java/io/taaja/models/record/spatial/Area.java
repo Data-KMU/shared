@@ -9,6 +9,8 @@ import java.util.List;
 @Data
 public class Area extends SpatialEntity {
 
+    public static final String TYPE_VALUE = "Area";
+
     @JsonView(SpatialRecordView.Full.class)
     private Float elevation;
 

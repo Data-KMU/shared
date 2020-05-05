@@ -30,6 +30,11 @@ public class LocationInformation {
         this.spatialEntities = new ArrayList<>();
     }
 
+
+    public void addSpatialEntity(SpatialEntity spatialEntity){
+        this.spatialEntities.add(spatialEntity);
+    }
+
     public List<SpatialEntity> getSpatialEntities(){
         if(this.spatialEntities != null){
             Collections.sort(this.spatialEntities);

@@ -4,18 +4,35 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ExtensionBehaviour {
 
-    Default("default"),
-    ExclusionZone("exclusionZone");
+    Default("default", 8),
+    TrafficZone("trafficZone", 128),
+    ExclusionZone("exclusionZone", 2048);
 
-    private final String value;
+    /**
+     * 0x0111111111111111
+     */
+    public static final int MAX_PRIORITY_VALUE = 32767;
 
-    ExtensionBehaviour(String value) {
+    private final String name;
+    private final int value;
+
+    /**
+     * max val: 32767
+     */
+    ExtensionBehaviour(String name, int value) {
+        this.name = name;
         this.value = value;
     }
 
     @JsonValue
-    public String getValue() {
-        return value;
+    public String getName() {
+        return this.name;
     }
+
+    public int getValue() {
+        return this.value;
+    }
+
+
 
 }

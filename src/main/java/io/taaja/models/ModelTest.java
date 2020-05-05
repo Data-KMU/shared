@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.exc.InvalidTypeIdException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import io.taaja.models.generic.Coordinates;
+import io.taaja.models.generic.LocationInformation;
 import io.taaja.models.message.KafkaMessage;
 import io.taaja.models.message.data.update.SpatialDataUpdate;
 import io.taaja.models.message.data.update.actuator.AbstractActuatorUpdate;
@@ -13,13 +14,17 @@ import io.taaja.models.message.extension.operation.OperationType;
 import io.taaja.models.message.extension.operation.SpatialOperation;
 import io.taaja.models.record.spatial.Area;
 import io.taaja.models.record.spatial.Corridor;
+import io.taaja.models.record.spatial.ExtensionBehaviour;
 import io.taaja.models.record.spatial.SpatialEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import static io.taaja.models.record.spatial.ExtensionPriority.MAX_PRIORITY;
 
 class ModelTest {
 
@@ -41,6 +46,51 @@ class ModelTest {
         area.setId(UUID.randomUUID().toString());
         return area;
     }
+
+
+    @Test
+    void testPriority(){
+        SpatialEntity defaultArea = getSpatialEntity();
+        defaultArea.setPriority(MAX_PRIORITY);
+        defaultArea.setExtensionBehaviour(ExtensionBehaviour.Default);
+
+        SpatialEntity trafficZone = getSpatialEntity();
+        trafficZone.setPriority(0);
+        trafficZone.setExtensionBehaviour(ExtensionBehaviour.TrafficZone);
+
+        SpatialEntity exclusionZone = getSpatialEntity();
+        exclusionZone.setPriority(0);
+        exclusionZone.setExtensionBehaviour(ExtensionBehaviour.ExclusionZone);
+
+        LocationInformation locationInformation = new LocationInformation();
+        locationInformation.addSpatialEntity(trafficZone);
+        locationInformation.addSpatialEntity(exclusionZone);
+        locationInformation.addSpatialEntity(defaultArea);
+
+
+        List<SpatialEntity> spatialEntities = locationInformation.getSpatialEntities();
+
+        SpatialEntity lowPrio = spatialEntities.get(0);
+        SpatialEntity midPrio = spatialEntities.get(1);
+        SpatialEntity highPrio = spatialEntities.get(2);
+
+        Assertions.assertTrue(lowPrio.calculateTotalPriority() < midPrio.calculateTotalPriority());
+        Assertions.assertTrue(midPrio.calculateTotalPriority() < highPrio.calculateTotalPriority());
+
+        lowPrio.setPriority(0);
+        midPrio.setPriority(MAX_PRIORITY);
+
+        Assertions.assertTrue(lowPrio.calculateTotalPriority() < midPrio.calculateTotalPriority());
+        Assertions.assertTrue(midPrio.calculateTotalPriority() < highPrio.calculateTotalPriority());
+
+        midPrio.setPriority(0);
+        highPrio.setPriority(MAX_PRIORITY);
+
+        Assertions.assertTrue(lowPrio.calculateTotalPriority() < midPrio.calculateTotalPriority());
+        Assertions.assertTrue(midPrio.calculateTotalPriority() < highPrio.calculateTotalPriority());
+
+    }
+
 
     @Test
     void testPositionUpdate() throws IOException {

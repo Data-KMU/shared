@@ -10,6 +10,8 @@ import java.util.List;
 @Data
 public class Corridor extends SpatialEntity {
 
+    public static final String TYPE_VALUE = "Corridor";
+
     public enum ShapeType{
         Circular("circular");
 
