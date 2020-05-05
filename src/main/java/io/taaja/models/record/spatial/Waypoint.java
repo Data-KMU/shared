@@ -12,4 +12,16 @@ public class Waypoint extends LongLat {
     Float altitude;
     Object additionalData;
 
+    public Waypoint(){}
+
+    public Waypoint(float longitude, float latitude){
+        super(longitude, latitude);
+    }
+
+    public Waypoint(float longitude, float latitude, Float altitude, Object additionalData){
+        this(longitude, latitude);
+        this.altitude = altitude;
+        this.additionalData = additionalData;
+    }
+
 }

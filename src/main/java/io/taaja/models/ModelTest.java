@@ -1,5 +1,7 @@
 package io.taaja.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.exc.InvalidTypeIdException;
@@ -12,17 +14,13 @@ import io.taaja.models.message.data.update.actuator.AbstractActuatorUpdate;
 import io.taaja.models.message.data.update.actuator.PositionUpdate;
 import io.taaja.models.message.extension.operation.OperationType;
 import io.taaja.models.message.extension.operation.SpatialOperation;
-import io.taaja.models.record.spatial.Area;
-import io.taaja.models.record.spatial.Corridor;
-import io.taaja.models.record.spatial.ExtensionBehaviour;
-import io.taaja.models.record.spatial.SpatialEntity;
+import io.taaja.models.record.spatial.*;
+import io.taaja.models.views.SpatialRecordView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static io.taaja.models.record.spatial.ExtensionPriority.MAX_PRIORITY;
 
@@ -47,6 +45,80 @@ class ModelTest {
         return area;
     }
 
+
+    @Test
+    @JsonView(SpatialRecordView.Identity.class)
+    void testVisability() throws IOException {
+
+        PositionUpdate positionUpdate = new PositionUpdate();
+        Coordinates coordinates = new Coordinates();
+        coordinates.setLatitude(1000f);
+        coordinates.setLatitude(11.12f);
+        coordinates.setLongitude(46.34f);
+        positionUpdate.setPosition(coordinates);
+        SpatialDataUpdate spatialDataUpdate = new SpatialDataUpdate(UUID.randomUUID().toString(), positionUpdate);
+        Map<String, AbstractActuatorUpdate> actuators = spatialDataUpdate.getActuators();
+
+        Corridor corridor = new Corridor();
+        corridor.setId(UUID.randomUUID().toString());
+        corridor.setShape(Corridor.ShapeType.Circular);
+        corridor.setValidFrom(new Date());
+        corridor.setValidUntil(new Date());
+        corridor.setPriority(ExtensionPriority.VERY_HIGH_PRIORITY);
+
+
+        List<List<Waypoint>> wpl = new ArrayList<>();
+        List<Waypoint> waypoints = new ArrayList<>();
+        wpl.add(waypoints);
+
+        Waypoint waypoint = new Waypoint();
+        waypoint.setAltitude(1000f);
+        waypoint.setLatitude(11.12f);
+        waypoint.setLongitude(46.34f);
+        waypoint.setAdditionalData("additional data");
+        waypoints.add(waypoint);
+
+        corridor.setCoordinates(wpl);
+        corridor.setActuators(actuators);
+
+        Area area = new Area();
+        area.setId(UUID.randomUUID().toString());
+        area.setElevation(123f);
+        area.setHeight(456f);
+        area.setValidFrom(new Date());
+        area.setValidUntil(new Date());
+        area.setPriority(ExtensionPriority.HIGH_PRIORITY);
+        List<List<LongLat>> lll = new ArrayList<>();
+        List<LongLat> longlats = new ArrayList<>();
+        lll.add(longlats);
+        LongLat longLat = new LongLat();
+        longLat.setLatitude(11.11f);
+        longLat.setLongitude(46.46f);
+        longlats.add(longLat);
+        longlats.add(longLat);
+        longlats.add(longLat);
+        area.setCoordinates(lll);
+        area.setActuators(actuators);
+
+
+        LocationInformation locationInformation = new LocationInformation();
+        List<SpatialEntity> spatialEntities = locationInformation.getSpatialEntities();
+        spatialEntities.add(corridor);
+        spatialEntities.add(area);
+        locationInformation.setAltitude(123f);
+        locationInformation.setLatitude(456f);
+        locationInformation.setLongitude(789f);
+
+
+        String valueAsString = objectMapper.writerWithView(SpatialRecordView.Identity.class).writeValueAsString(locationInformation);
+
+        LocationInformation locationInformationFromString = objectMapper.readValue(valueAsString, LocationInformation.class);
+
+        for(SpatialEntity spatialEntity : locationInformationFromString.getSpatialEntities()){
+            Assertions.assertTrue(spatialEntity.getActuators() == null && spatialEntity.getSamplers() == null && spatialEntity.getSensors() == null);
+        }
+
+    }
 
     @Test
     void testPriority(){

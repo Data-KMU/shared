@@ -13,13 +13,12 @@ import java.util.List;
 @Data
 public class LocationInformation {
 
-
-    @JsonView(SpatialRecordView.Identity.class)
     private List<SpatialEntity> spatialEntities;
 
     private float longitude;
 
     private float latitude;
+
     //nullable
     private Float altitude;
 

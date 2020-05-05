@@ -6,7 +6,20 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties("timestamp") /* dedrone position includes timestamp */
 public class Coordinates {
-    private float latitude;
     private float longitude;
+    private float latitude;
     private Float altitude;
+
+    public Coordinates(){}
+
+    public Coordinates(float longitude, float latitude,  Float altitude){
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.altitude = altitude;
+    }
+
+    public Coordinates(float longitude, float latitude){
+        this(longitude, latitude, null);
+    }
+
 }
