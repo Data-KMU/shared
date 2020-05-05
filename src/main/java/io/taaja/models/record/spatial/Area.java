@@ -19,7 +19,6 @@ public class Area extends SpatialEntity {
     @JsonView(SpatialRecordView.Full.class)
     private Float height;
 
-    @JsonMerge(value = OptBoolean.FALSE)
     @JsonView(SpatialRecordView.Full.class)
     private List<List<LongLat>> coordinates;
 

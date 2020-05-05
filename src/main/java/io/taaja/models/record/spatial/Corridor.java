@@ -32,7 +32,6 @@ public class Corridor extends SpatialEntity {
     @JsonView(SpatialRecordView.Full.class)
     private ShapeType shape;
 
-    @JsonMerge(value = OptBoolean.FALSE)
     @JsonView(SpatialRecordView.Full.class)
     private List<List<Waypoint>> coordinates;
 
