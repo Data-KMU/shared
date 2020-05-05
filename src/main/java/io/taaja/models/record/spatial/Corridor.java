@@ -1,7 +1,9 @@
 package io.taaja.models.record.spatial;
 
+import com.fasterxml.jackson.annotation.JsonMerge;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.OptBoolean;
 import io.taaja.models.views.SpatialRecordView;
 import lombok.Data;
 
@@ -30,6 +32,7 @@ public class Corridor extends SpatialEntity {
     @JsonView(SpatialRecordView.Full.class)
     private ShapeType shape;
 
+    @JsonMerge(value = OptBoolean.FALSE)
     @JsonView(SpatialRecordView.Full.class)
     private List<List<Waypoint>> coordinates;
 
