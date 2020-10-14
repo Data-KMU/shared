@@ -29,10 +29,10 @@ public class Corridor extends SpatialEntity {
         }
     }
 
-    @JsonView(SpatialRecordView.Full.class)
+    @JsonView(SpatialRecordView.Coordinates.class)
     private ShapeType shape;
 
-    @JsonView(SpatialRecordView.Full.class)
-    private List<List<Waypoint>> coordinates;
+    @JsonView(SpatialRecordView.Coordinates.class)
+    private List<Waypoint> coordinates;
 
 }

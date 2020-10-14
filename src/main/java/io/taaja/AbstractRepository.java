@@ -1,5 +1,6 @@
 package io.taaja;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -39,6 +40,10 @@ public abstract class AbstractRepository<T> {
         return getCollection().find(eq("_id", id)).first();
     }
 
+    public FindIterable<T> findAll(){
+        return getCollection().find();
+    }
+
     public T findByIdOrException(String id){
         T entity = this.findById(id);
         if(entity == null){
@@ -66,6 +71,5 @@ public abstract class AbstractRepository<T> {
     public T deleteOneByIdAndGet(String Id) {
         return this.getCollection().findOneAndDelete(Filters.eq("_id", Id));
     }
-
 
 }

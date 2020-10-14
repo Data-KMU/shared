@@ -13,13 +13,13 @@ public class Area extends SpatialEntity {
 
     public static final String TYPE_VALUE = "Area";
 
-    @JsonView(SpatialRecordView.Full.class)
+    @JsonView(SpatialRecordView.Coordinates.class)
     private Float elevation;
 
-    @JsonView(SpatialRecordView.Full.class)
+    @JsonView(SpatialRecordView.Coordinates.class)
     private Float height;
 
-    @JsonView(SpatialRecordView.Full.class)
+    @JsonView(SpatialRecordView.Coordinates.class)
     private List<List<LongLat>> coordinates;
 
 }

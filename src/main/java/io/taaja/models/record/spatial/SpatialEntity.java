@@ -52,6 +52,9 @@ public abstract class SpatialEntity implements Comparable<SpatialEntity> {
     @JsonView(SpatialRecordView.Full.class)
     private Object samplers;
 
+    @JsonView(SpatialRecordView.Full.class)
+    private Object properties;
+
     @Override
     public int compareTo(SpatialEntity spatialEntity) {
         if (spatialEntity == null)
