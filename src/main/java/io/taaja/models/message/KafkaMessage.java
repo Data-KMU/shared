@@ -10,7 +10,6 @@ import lombok.Data;
 @Data
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
         property = "messageChannel"
 )
 @JsonSubTypes({
@@ -18,5 +17,7 @@ import lombok.Data;
         @JsonSubTypes.Type(value = SpatialDataUpdate.class, name = MessageChannel.SpatialDataUpdate)
 })
 public abstract class KafkaMessage {
+
+    private String originatorId;
 
 }
