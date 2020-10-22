@@ -12,6 +12,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Holds a list of SpatialEntities that are Intersecting with a point or another SpatialEntity
+ */
 @Data
 public class LocationInformation {
 
