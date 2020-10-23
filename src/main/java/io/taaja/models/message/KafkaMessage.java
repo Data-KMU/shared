@@ -18,6 +18,6 @@ import lombok.Data;
 })
 public abstract class KafkaMessage {
 
-    private String originatorId;
+    private String publisherId;
 
 }

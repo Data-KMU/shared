@@ -6,7 +6,8 @@ public enum OperationType {
 
     Created("created"),
     Altered("altered"),
-    Removed("removed");
+    Removed("removed"),
+    Unchanged("unchanged");
 
     private final String value;
 
