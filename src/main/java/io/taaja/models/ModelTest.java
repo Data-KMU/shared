@@ -9,8 +9,7 @@ import io.taaja.models.generic.Coordinates;
 import io.taaja.models.generic.LocationInformation;
 import io.taaja.models.message.KafkaMessage;
 import io.taaja.models.message.data.update.SpatialDataUpdate;
-import io.taaja.models.message.data.update.actuator.AbstractActuatorUpdate;
-import io.taaja.models.message.data.update.actuator.PositionUpdate;
+import io.taaja.models.message.data.update.impl.PositionUpdate;
 import io.taaja.models.message.extension.operation.OperationType;
 import io.taaja.models.message.extension.operation.SpatialOperation;
 import io.taaja.models.record.spatial.*;
@@ -34,7 +33,7 @@ class ModelTest {
         coordinates.setLatitude(345);
         coordinates.setAltitude(null);
         positionUpdate.setPosition(coordinates);
-        return new SpatialDataUpdate(UUID.randomUUID().toString(), positionUpdate);
+        return new SpatialDataUpdate().addActuatorData(UUID.randomUUID().toString(), positionUpdate);
     }
 
     static SpatialEntity getSpatialEntity(){
@@ -55,8 +54,8 @@ class ModelTest {
         coordinates.setLatitude(11.12f);
         coordinates.setLongitude(46.34f);
         positionUpdate.setPosition(coordinates);
-        SpatialDataUpdate spatialDataUpdate = new SpatialDataUpdate(UUID.randomUUID().toString(), positionUpdate);
-        Map<String, AbstractActuatorUpdate> actuators = spatialDataUpdate.getActuators();
+        SpatialDataUpdate spatialDataUpdate = new SpatialDataUpdate().addActuatorData(UUID.randomUUID().toString(), positionUpdate);
+        Map<String, Object> actuators = spatialDataUpdate.getActuators();
 
         Corridor corridor = new Corridor();
         corridor.setId(UUID.randomUUID().toString());
@@ -192,7 +191,7 @@ class ModelTest {
 
         SpatialDataUpdate spatialDataUpdate = (SpatialDataUpdate) kafkaMessage;
 
-        AbstractActuatorUpdate next = spatialDataUpdate.getActuators().values().iterator().next();
+        Object next = spatialDataUpdate.getActuators().values().iterator().next();
         
     }
 
