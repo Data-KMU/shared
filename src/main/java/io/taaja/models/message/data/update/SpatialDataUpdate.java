@@ -1,5 +1,6 @@
 package io.taaja.models.message.data.update;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.taaja.models.message.KafkaMessage;
@@ -14,6 +15,7 @@ import java.util.Map;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SpatialDataUpdate extends KafkaMessage {
 
     // entity id -> Data
