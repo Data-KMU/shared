@@ -20,18 +20,18 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 @JBossLog
-public abstract class AbstractKafkaConsumerService {
+public abstract class AbstractKafkaConsumerService extends AbstractService {
 
     @ConfigProperty(name = "kafka.bootstrap-servers")
     protected String bootstrapServers;
 
-    @ConfigProperty(name = "kafka.poll-records")
+    @ConfigProperty(name = "kafka.poll-records", defaultValue = "100")
     protected int pollRecords;
 
-    @ConfigProperty(name = "kafka.auto-commit")
+    @ConfigProperty(name = "kafka.auto-commit", defaultValue = "false")
     protected boolean autoCommit;
 
-    @ConfigProperty(name = "kafka.offset-reset")
+    @ConfigProperty(name = "kafka.offset-reset", defaultValue = "latest")
     protected String offsetReset;
 
     @ConfigProperty(name = "kafka.group-id")
@@ -79,14 +79,14 @@ public abstract class AbstractKafkaConsumerService {
     protected abstract void processRecord(ConsumerRecord<String, String> record);
 
 
-    void onStart(@Observes StartupEvent ev) {
+    public void onStart(@Observes StartupEvent ev) {
         this.consumerId = this.groupId + "/" + UUID.randomUUID().toString();
         log.info("starting kafka consumer. groupId: " + this.groupId +" consumer id: " + this.consumerId);
         this.livDataConsumer = new ExtensionLivDataConsumer();
         this.livDataConsumer.start();
     }
 
-    void onStop(@Observes ShutdownEvent ev) throws IOException {
+    public void onStop(@Observes ShutdownEvent ev) throws IOException {
         log.info("shutting down kafka consumer. groupId: " + this.groupId +" consumer id: " + this.consumerId);
         this.livDataConsumer.close();
     }

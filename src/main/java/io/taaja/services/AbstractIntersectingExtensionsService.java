@@ -9,7 +9,6 @@ import io.taaja.models.generic.LocationInformation;
 import io.taaja.models.record.spatial.SpatialEntity;
 import io.taaja.models.views.SpatialRecordView;
 import lombok.SneakyThrows;
-import lombok.extern.jbosslog.JBossLog;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -19,34 +18,32 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.ws.rs.BadRequestException;
 
 
-@ApplicationScoped
-@JBossLog
-public class IntersectingExtensionsService {
+
+public abstract class AbstractIntersectingExtensionsService extends AbstractService{
 
     @ConfigProperty(name = "purple-tiger.url")
-    private String purpleTiger = "https://purpletiger.taaja.io//v1/calculate/intersectingExtensions";
+    protected String purpleTiger = "https://purpletiger.taaja.io//v1/calculate/intersectingExtensions";
 
-    @ConfigProperty(name = "purple-tiger.timeout")
-    private int timeout = 0;
+    @ConfigProperty(name = "purple-tiger.timeout", defaultValue="-1")
+    protected int timeout = -1;
 
-    private ObjectWriter objectWriter;
+    protected ObjectWriter objectWriter;
 
-    private HttpClient client;
-    private RequestConfig requestConfig;
-    private ObjectReader objectReader;
+    protected HttpClient client;
+    protected RequestConfig requestConfig;
+    protected ObjectReader objectReader;
 
-    void onStart(@Observes StartupEvent ev) {
+    public void onStart(@Observes StartupEvent ev) {
         this.objectWriter = new ObjectMapper().writerWithView(SpatialRecordView.Coordinates.class);
         this.objectReader = new ObjectMapper().readerFor(LocationInformation.class);
         this.client = HttpClientBuilder.create().build();
 
         // 3 sec timeout
-        if(timeout > 0){
+        if(timeout > -1){
             this.requestConfig = RequestConfig.custom().setConnectTimeout(this.timeout).build();
         }
     }

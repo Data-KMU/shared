@@ -14,37 +14,35 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.UUID;
 
-@ApplicationScoped
 @JBossLog
-public class KafkaProducerService {
+public abstract class AbstractKafkaProducerService extends AbstractService {
 
     @ConfigProperty(name = "kafka.bootstrap-servers")
-    private String bootstrapServers;
+    protected String bootstrapServers;
 
-    private Producer<String, KafkaMessage> kafkaProducer;
+    protected Producer<String, KafkaMessage> kafkaProducer;
 
     public static String originatorId;
 
 
-    void onStart(@Observes StartupEvent ev) {
-        if(KafkaProducerService.originatorId == null){
-            KafkaProducerService.originatorId = UUID.randomUUID().toString();
+    public void onStart(@Observes StartupEvent ev) {
+        if(AbstractKafkaProducerService.originatorId == null){
+            AbstractKafkaProducerService.originatorId = UUID.randomUUID().toString();
         }
-        log.info("starting kafka producer with id: " + KafkaProducerService.originatorId);
+        log.info("starting kafka producer with id: " + AbstractKafkaProducerService.originatorId);
         Properties producerProperties = new Properties();
         producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         producerProperties.put(ProducerConfig.CLIENT_ID_CONFIG, this.originatorId);
         this.kafkaProducer = new KafkaProducer(producerProperties, new StringSerializer(), new JacksonSerializer());
     }
 
-    void onStop(@Observes ShutdownEvent ev) throws IOException {
-        log.info("shutdown kafka producer with id: " + KafkaProducerService.originatorId);
+    public void onStop(@Observes ShutdownEvent ev) throws IOException {
+        log.info("shutdown kafka producer with id: " + AbstractKafkaProducerService.originatorId);
         this.kafkaProducer.close();
     }
 
@@ -59,10 +57,10 @@ public class KafkaProducerService {
     }
 
     private void sendInter(final KafkaMessage kafkaMessage, final String targetId){
-        KafkaProducerService.this.kafkaProducer.send(
+        AbstractKafkaProducerService.this.kafkaProducer.send(
                 new ProducerRecord<>(
                         Topics.SPATIAL_EXTENSION_LIFE_DATA_TOPIC_PREFIX + targetId,
-                        KafkaProducerService.originatorId + "/" + UUID.randomUUID().toString(),
+                        AbstractKafkaProducerService.originatorId + "/" + UUID.randomUUID().toString(),
                         kafkaMessage
                 )
         );
