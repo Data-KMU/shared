@@ -36,7 +36,7 @@ public class KafkaProducerService {
         if(KafkaProducerService.originatorId == null){
             KafkaProducerService.originatorId = UUID.randomUUID().toString();
         }
-        log.info("starting kafka with id: " + KafkaProducerService.originatorId);
+        log.info("starting kafka producer with id: " + KafkaProducerService.originatorId);
         Properties producerProperties = new Properties();
         producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         producerProperties.put(ProducerConfig.CLIENT_ID_CONFIG, this.originatorId);
@@ -44,7 +44,7 @@ public class KafkaProducerService {
     }
 
     void onStop(@Observes ShutdownEvent ev) throws IOException {
-        log.info("shutdown kafka");
+        log.info("shutdown kafka producer with id: " + KafkaProducerService.originatorId);
         this.kafkaProducer.close();
     }
 
