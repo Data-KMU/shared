@@ -46,20 +46,20 @@ public abstract class AbstractKafkaProducerService extends AbstractService {
         this.kafkaProducer.close();
     }
 
-    public void publish(final KafkaMessage kafkaMessage, final Iterable<SpatialEntity> targets){
+    public void publish(final KafkaMessage kafkaMessage, final Iterable<SpatialEntity> spatialEntities){
         kafkaMessage.setPublisherId(this.originatorId);
-        targets.forEach(spatialEntity -> this.publish(kafkaMessage, spatialEntity.getId()));
+        spatialEntities.forEach(spatialEntity -> this.publish(kafkaMessage, spatialEntity.getId()));
     }
 
-    public void publish(final KafkaMessage kafkaMessage, final String targetId){
+    public void publish(final KafkaMessage kafkaMessage, final String spatialEntityId){
         kafkaMessage.setPublisherId(this.originatorId);
-        this.sendInter(kafkaMessage, targetId);
+        this.sendInter(kafkaMessage, spatialEntityId);
     }
 
-    private void sendInter(final KafkaMessage kafkaMessage, final String targetId){
+    private void sendInter(final KafkaMessage kafkaMessage, final String spatialEntityId){
         AbstractKafkaProducerService.this.kafkaProducer.send(
                 new ProducerRecord<>(
-                        Topics.SPATIAL_EXTENSION_LIFE_DATA_TOPIC_PREFIX + targetId,
+                        Topics.SPATIAL_EXTENSION_LIFE_DATA_TOPIC_PREFIX + spatialEntityId,
                         AbstractKafkaProducerService.originatorId + "/" + UUID.randomUUID().toString(),
                         kafkaMessage
                 )
