@@ -9,10 +9,8 @@ public class PositionUpdate {
 
     private Coordinates position;
 
-    public static SpatialDataUpdate createPositionUpdate(String entityId, Coordinates coordinates){
-        SpatialDataUpdate spatialDataUpdate = new SpatialDataUpdate();
-        spatialDataUpdate.getActuators().put(entityId, coordinates);
-        return spatialDataUpdate;
+    public static SpatialDataUpdate createPositionUpdate(String vehicleId, Coordinates coordinates){
+        return new SpatialDataUpdate().addActuatorData(vehicleId, coordinates);
     }
 
 

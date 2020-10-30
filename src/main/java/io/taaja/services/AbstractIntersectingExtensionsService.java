@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import io.quarkus.runtime.StartupEvent;
+import io.taaja.models.generic.Coordinates;
 import io.taaja.models.generic.LocationInformation;
 import io.taaja.models.record.spatial.SpatialEntity;
 import io.taaja.models.views.SpatialRecordView;
@@ -78,6 +79,11 @@ public abstract class AbstractIntersectingExtensionsService extends AbstractServ
     }
 
     @SneakyThrows
+    public LocationInformation calculate(Coordinates coordinates) {
+        return this.calculate(coordinates.getLongitude(), coordinates.getLatitude(), coordinates.getAltitude());
+    }
+
+    @SneakyThrows
     public LocationInformation calculate(
             @QueryParam("longitude") float longitude,
             @QueryParam("latitude") float latitude,
@@ -87,7 +93,6 @@ public abstract class AbstractIntersectingExtensionsService extends AbstractServ
         HttpGet httpGet = new HttpGet(
                 this.url + "/" + AbstractIntersectingExtensionsService.VERSION +
                         "/encode/position?longitude=" + longitude + "&latitude=" + latitude + (altitude == null ? "" : "&altitude=" + altitude));
-
 
         if(this.requestConfig != null){
             httpGet.setConfig(this.requestConfig);

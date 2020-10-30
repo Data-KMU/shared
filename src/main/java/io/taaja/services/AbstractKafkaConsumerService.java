@@ -8,6 +8,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -15,8 +16,7 @@ import javax.enterprise.event.Observes;
 import java.io.Closeable;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @JBossLog
@@ -28,13 +28,15 @@ public abstract class AbstractKafkaConsumerService extends AbstractService {
     @ConfigProperty(name = "kafka.poll-records", defaultValue = "100")
     protected int pollRecords;
 
-    @ConfigProperty(name = "kafka.auto-commit", defaultValue = "false")
+    @ConfigProperty(name = "kafka.auto-commit", defaultValue = "true")
     protected boolean autoCommit;
 
-    @ConfigProperty(name = "kafka.offset-reset", defaultValue = "latest")
+    @ConfigProperty(name = "kafka.offset-reset", defaultValue = "earliest")
     protected String offsetReset;
 
-    @ConfigProperty(name = "kafka.group-id")
+    @ConfigProperty(name = "kafka.group-name")
+    protected String groupName;
+
     protected String groupId;
 
     protected String consumerId;
@@ -60,7 +62,9 @@ public abstract class AbstractKafkaConsumerService extends AbstractService {
         @Override
         public void run() {
             KafkaConsumer kafkaConsumer = new KafkaConsumer(this.consumerProperties, new StringDeserializer(), new StringDeserializer());
-            kafkaConsumer.subscribe(Pattern.compile(Topics.SPATIAL_EXTENSION_LIFE_DATA_TOPIC_PREFIX + ".*"));
+            kafkaConsumer.subscribe(Pattern.compile(Topics.SPATIAL_EXTENSION_LIFE_DATA_TOPIC_PREFIX + "*"));
+            kafkaConsumer.subscribe(Pattern.compile("^" + Topics.SPATIAL_EXTENSION_LIFE_DATA_TOPIC_PREFIX + ".*"));
+            log.info("Subscribed topics: " + String.join(", ", kafkaConsumer.listTopics().keySet()) );
             while (this.running){
                 ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofMillis(100));
                 for(ConsumerRecord<String, String> record : records){
@@ -78,9 +82,12 @@ public abstract class AbstractKafkaConsumerService extends AbstractService {
 
     protected abstract void processRecord(ConsumerRecord<String, String> record);
 
+    protected abstract String getGroupId(String clientId, String groupName);
 
     public void onStart(@Observes StartupEvent ev) {
-        this.consumerId = this.groupId + "/" + UUID.randomUUID().toString();
+        this.consumerId = this.groupName + "/" + UUID.randomUUID().toString();
+        this.groupId = this.getGroupId(this.consumerId, this.groupName);
+
         log.info("starting kafka consumer. groupId: " + this.groupId +" consumer id: " + this.consumerId);
         this.livDataConsumer = new ExtensionLivDataConsumer();
         this.livDataConsumer.start();
