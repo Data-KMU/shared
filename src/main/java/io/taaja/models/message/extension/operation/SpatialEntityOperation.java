@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class SpatialOperation extends KafkaMessage {
+public class SpatialEntityOperation extends KafkaMessage {
 
     private String targetId;
     private OperationType operationType;

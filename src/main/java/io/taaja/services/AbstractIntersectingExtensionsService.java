@@ -10,20 +10,18 @@ import io.taaja.models.generic.LocationInformation;
 import io.taaja.models.record.spatial.SpatialEntity;
 import io.taaja.models.views.SpatialRecordView;
 import lombok.SneakyThrows;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.event.Observes;
+import javax.transaction.Status;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.QueryParam;
 import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 
 
 public abstract class AbstractIntersectingExtensionsService extends AbstractService{
@@ -39,39 +37,40 @@ public abstract class AbstractIntersectingExtensionsService extends AbstractServ
     protected ObjectWriter objectWriter;
 
     protected HttpClient client;
-    protected RequestConfig requestConfig;
+//    protected RequestConfig requestConfig;
     protected ObjectReader objectReader;
 
     public void onStart(@Observes StartupEvent ev) {
         this.objectWriter = new ObjectMapper().writerWithView(SpatialRecordView.Coordinates.class);
         this.objectReader = new ObjectMapper().readerFor(LocationInformation.class);
-        this.client = HttpClientBuilder.create().build();
-
-        // 3 sec timeout
-        if(timeout > -1){
-            this.requestConfig = RequestConfig.custom().setConnectTimeout(this.timeout).build();
-        }
+        this.client = HttpClient.newHttpClient();
     }
 
     @SneakyThrows
     public LocationInformation calculate(SpatialEntity spatialEntity){
 
-        HttpPost httpPost = new HttpPost(this.url + "/" + AbstractIntersectingExtensionsService.VERSION + "/calculate/intersectingExtensions");
 
-        httpPost.setEntity(new ByteArrayEntity(
-                objectWriter.writeValueAsBytes(spatialEntity)
-        ));
-        httpPost.setHeader("Content-type", "application/json");
-        if(this.requestConfig != null){
-            httpPost.setConfig(this.requestConfig);
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
+                .uri(new URI(this.url + "/" + AbstractIntersectingExtensionsService.VERSION + "/calculate/intersectingExtensions"))
+                .POST(HttpRequest.BodyPublishers.ofByteArray(objectWriter.writeValueAsBytes(spatialEntity)))
+                .headers("Content-Type", "application/json");
+
+        if(this.timeout > -1){
+            builder.timeout(Duration.ofSeconds(this.timeout));
         }
-        HttpResponse response = this.client.execute(httpPost);
-        if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+
+        HttpResponse<String> response = this.client.send(
+                builder.build(),
+                HttpResponse.BodyHandlers.ofString()
+        );
+
+
+        if(response.statusCode() != 200) {
             throw new BadRequestException("cant resolve coordinates");
         }
 
         LocationInformation locationInformation = objectReader.readValue(
-                response.getEntity().getContent()
+                response.body()
         );
         locationInformation.setOriginator(spatialEntity);
 
@@ -90,20 +89,23 @@ public abstract class AbstractIntersectingExtensionsService extends AbstractServ
             @QueryParam("altitude") Float altitude
     ){
 
-        HttpGet httpGet = new HttpGet(
-                this.url + "/" + AbstractIntersectingExtensionsService.VERSION +
-                        "/encode/position?longitude=" + longitude + "&latitude=" + latitude + (altitude == null ? "" : "&altitude=" + altitude));
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(new URI(this.url + "/" + AbstractIntersectingExtensionsService.VERSION +
+                        "/encode/position?longitude=" + longitude + "&latitude=" + latitude + (altitude == null ? "" : "&altitude=" + altitude)))
+                .GET()
+                .build();
 
-        if(this.requestConfig != null){
-            httpGet.setConfig(this.requestConfig);
-        }
-        HttpResponse response = this.client.execute(httpGet);
-        if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+        HttpResponse<String> response = this.client.send(
+                httpRequest,
+                HttpResponse.BodyHandlers.ofString()
+        );
+
+        if(response.statusCode() != 200) {
             throw new BadRequestException("cant resolve coordinates");
         }
 
         return objectReader.readValue(
-                response.getEntity().getContent()
+                response.body()
         );
     }
 

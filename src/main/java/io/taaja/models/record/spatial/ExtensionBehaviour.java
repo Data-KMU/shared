@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ExtensionBehaviour {
 
-    Default("default", 8),
-    TrafficZone("trafficZone", 128),
-    ExclusionZone("exclusionZone", 2048);
+    DEFAULT("default", 8),
+    TRAFFIC_ZONE("trafficZone", 128),
+    EXCLUSION_ZONE("exclusionZone", 2048);
 
     /**
      * 0x0111111111111111

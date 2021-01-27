@@ -54,7 +54,6 @@ public abstract class AbstractKafkaConsumerService extends AbstractService {
             consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, AbstractKafkaConsumerService.this.autoCommit);
             consumerProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, AbstractKafkaConsumerService.this.offsetReset);
             consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, AbstractKafkaConsumerService.this.groupId);
-
             consumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, AbstractKafkaConsumerService.this.consumerId);
             this.setName(this.getClass().getSimpleName());
         }
@@ -62,7 +61,7 @@ public abstract class AbstractKafkaConsumerService extends AbstractService {
         @Override
         public void run() {
             KafkaConsumer kafkaConsumer = new KafkaConsumer(this.consumerProperties, new StringDeserializer(), new StringDeserializer());
-            kafkaConsumer.subscribe(Pattern.compile(Topics.SPATIAL_EXTENSION_LIFE_DATA_TOPIC_PREFIX + "*"));
+//            kafkaConsumer.subscribe(Pattern.compile(Topics.SPATIAL_EXTENSION_LIFE_DATA_TOPIC_PREFIX + "*"));
             kafkaConsumer.subscribe(Pattern.compile("^" + Topics.SPATIAL_EXTENSION_LIFE_DATA_TOPIC_PREFIX + ".*"));
             log.info("Subscribed topics: " + String.join(", ", kafkaConsumer.listTopics().keySet()) );
             while (this.running){
@@ -85,7 +84,7 @@ public abstract class AbstractKafkaConsumerService extends AbstractService {
     protected abstract String getGroupId(String clientId, String groupName);
 
     public void onStart(@Observes StartupEvent ev) {
-        this.consumerId = this.groupName + "/" + UUID.randomUUID().toString();
+        this.consumerId = this.groupName + "#" + UUID.randomUUID().toString();
         this.groupId = this.getGroupId(this.consumerId, this.groupName);
 
         log.info("starting kafka consumer. groupId: " + this.groupId +" consumer id: " + this.consumerId);

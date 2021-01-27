@@ -7,10 +7,7 @@ import io.taaja.kafka.Topics;
 import io.taaja.models.message.KafkaMessage;
 import io.taaja.models.record.spatial.SpatialEntity;
 import lombok.extern.jbosslog.JBossLog;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -18,6 +15,7 @@ import javax.enterprise.event.Observes;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.Future;
 
 @JBossLog
 public abstract class AbstractKafkaProducerService extends AbstractService {
@@ -57,10 +55,10 @@ public abstract class AbstractKafkaProducerService extends AbstractService {
     }
 
     private void sendInter(final KafkaMessage kafkaMessage, final String spatialEntityId){
-        AbstractKafkaProducerService.this.kafkaProducer.send(
+        Future<RecordMetadata> send = AbstractKafkaProducerService.this.kafkaProducer.send(
                 new ProducerRecord<>(
                         Topics.SPATIAL_EXTENSION_LIFE_DATA_TOPIC_PREFIX + spatialEntityId,
-                        AbstractKafkaProducerService.originatorId + "/" + UUID.randomUUID().toString(),
+                        AbstractKafkaProducerService.originatorId + "#" + UUID.randomUUID().toString(),
                         kafkaMessage
                 )
         );

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
-@JsonIgnoreProperties("timestamp") /* dedrone position includes timestamp */
 public class Coordinates {
+
     private float longitude;
     private float latitude;
     private Float altitude;

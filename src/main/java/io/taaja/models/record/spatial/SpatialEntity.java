@@ -32,7 +32,7 @@ public abstract class SpatialEntity implements Comparable<SpatialEntity> {
     private int priority = ExtensionPriority.DEFAULT_PRIORITY;
 
     @JsonView(SpatialRecordView.Identity.class)
-    private ExtensionBehaviour extensionBehaviour = ExtensionBehaviour.TrafficZone;
+    private ExtensionBehaviour extensionBehaviour = ExtensionBehaviour.TRAFFIC_ZONE;
 
     @JsonView(SpatialRecordView.Identity.class)
     private Date created = new Date();

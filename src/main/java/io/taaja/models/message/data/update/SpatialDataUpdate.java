@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.taaja.models.message.KafkaMessage;
+import io.taaja.models.raw.SensorData;
 import lombok.Data;
 import lombok.SneakyThrows;
 
@@ -19,24 +20,20 @@ import java.util.Map;
 public class SpatialDataUpdate extends KafkaMessage {
 
     // entity id -> Data
-    private Map<String, Object> actuators = new HashMap<>();
-    private Map<String, Object> sensors = new HashMap<>();
-    private Map<String, Object> samplers = new HashMap<>();
+    private Map<String, Object> vehicleInformation = new HashMap<>();
+    private Map<String, Object> sensorInformation = new HashMap<>();
+    private Object metaInformation;
 
-    public SpatialDataUpdate addActuatorData(String actuatorId, Object data){
-        this.getActuators().put(actuatorId, data);
+    public SpatialDataUpdate addVehicleInformation(String vehicleId, Object data){
+        this.getVehicleInformation().put(vehicleId, data);
         return this;
     }
 
-    public SpatialDataUpdate addSensorData(String sensorId, Object data){
-        this.getSensors().put(sensorId, data);
+    public SpatialDataUpdate addSensorInformation(String sensorId, Object data){
+        this.getSensorInformation().put(sensorId, data);
         return this;
     }
 
-    public SpatialDataUpdate addSamplerData(String samplerId, Object data){
-        this.getSamplers().put(samplerId, data);
-        return this;
-    }
 
     @SneakyThrows
     @Override

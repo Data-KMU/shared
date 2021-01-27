@@ -3,7 +3,7 @@ package io.taaja.models.message;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.taaja.models.message.data.update.SpatialDataUpdate;
-import io.taaja.models.message.extension.operation.SpatialOperation;
+import io.taaja.models.message.extension.operation.SpatialEntityOperation;
 import lombok.Data;
 
 
@@ -13,7 +13,7 @@ import lombok.Data;
         property = "messageChannel"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = SpatialOperation.class, name = MessageChannel.SpatialOperation),
+        @JsonSubTypes.Type(value = SpatialEntityOperation.class, name = MessageChannel.SpatialOperation),
         @JsonSubTypes.Type(value = SpatialDataUpdate.class, name = MessageChannel.SpatialDataUpdate)
 })
 public abstract class KafkaMessage {
