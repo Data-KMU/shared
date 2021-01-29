@@ -7,12 +7,12 @@ import lombok.Data;
 import org.mongojack.Id;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        //geo Json attribute type
         property = "type"
 )
 @JsonSubTypes({
@@ -44,16 +44,13 @@ public abstract class SpatialEntity implements Comparable<SpatialEntity> {
     private Date validUntil;
 
     @JsonView(SpatialRecordView.Full.class)
-    private Object actuators;
+    private Map<String, Object> vehicleInformation = new HashMap<>();
 
     @JsonView(SpatialRecordView.Full.class)
-    private Object sensors;
+    private Map<String, Object> sensorInformation = new HashMap<>();
 
     @JsonView(SpatialRecordView.Full.class)
-    private Object samplers;
-
-    @JsonView(SpatialRecordView.Full.class)
-    private Object properties;
+    private Object metaInformation;
 
     @Override
     public int compareTo(SpatialEntity spatialEntity) {
