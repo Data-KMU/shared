@@ -19,6 +19,10 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+/**
+ * Deprecated: use smallrye
+ */
+@Deprecated
 @JBossLog
 public abstract class AbstractKafkaConsumerService extends AbstractService {
 
@@ -81,7 +85,7 @@ public abstract class AbstractKafkaConsumerService extends AbstractService {
 
     protected abstract void processRecord(ConsumerRecord<String, String> record);
 
-    protected abstract String getGroupId(String clientId, String groupName);
+    protected abstract String getGroupId(String consumerId, String groupName);
 
     public void onStart(@Observes StartupEvent ev) {
         this.consumerId = this.groupName + "#" + UUID.randomUUID().toString();
