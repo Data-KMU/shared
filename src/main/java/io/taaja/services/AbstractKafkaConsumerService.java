@@ -8,7 +8,6 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -16,7 +15,8 @@ import javax.enterprise.event.Observes;
 import java.io.Closeable;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.*;
+import java.util.Properties;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 @JBossLog

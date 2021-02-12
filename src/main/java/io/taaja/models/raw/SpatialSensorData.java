@@ -1,7 +1,6 @@
 package io.taaja.models.raw;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.taaja.models.message.data.update.SpatialDataUpdate;
 import lombok.Data;
 
 import java.util.LinkedList;
@@ -16,7 +15,7 @@ public class SpatialSensorData extends SensorData {
 
     public static SpatialSensorData createSpatialSensorData(List<String> intersectingSpatialEntitiesIds, SensorData sensorData){
         SpatialSensorData spatialSensorData = new SpatialSensorData();
-        spatialSensorData.setAccuracy(sensorData.getAccuracy());
+        spatialSensorData.setDeviation(sensorData.getDeviation());
         spatialSensorData.setCreated(sensorData.getCreated());
         spatialSensorData.setInformationType(sensorData.getInformationType());
         spatialSensorData.setPayload(sensorData.getPayload());

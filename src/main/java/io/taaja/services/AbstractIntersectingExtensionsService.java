@@ -10,11 +10,9 @@ import io.taaja.models.generic.LocationInformation;
 import io.taaja.models.record.spatial.SpatialEntity;
 import io.taaja.models.views.SpatialRecordView;
 import lombok.SneakyThrows;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.event.Observes;
-import javax.transaction.Status;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.QueryParam;
 import java.net.URI;

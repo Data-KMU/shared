@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.taaja.models.message.KafkaMessage;
-import io.taaja.models.raw.SensorData;
 import lombok.Data;
 import lombok.SneakyThrows;
 

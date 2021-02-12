@@ -1,9 +1,7 @@
 package io.taaja.models.record.spatial;
 
-import com.fasterxml.jackson.annotation.JsonMerge;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.annotation.OptBoolean;
 import io.taaja.models.views.SpatialRecordView;
 import lombok.Data;
 

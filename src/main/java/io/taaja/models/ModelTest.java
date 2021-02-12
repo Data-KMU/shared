@@ -1,25 +1,6 @@
 package io.taaja.models;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.exc.InvalidTypeIdException;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import io.taaja.models.generic.Coordinates;
-import io.taaja.models.generic.LocationInformation;
-import io.taaja.models.message.KafkaMessage;
-import io.taaja.models.message.data.update.SpatialDataUpdate;
-import io.taaja.models.message.extension.operation.OperationType;
-import io.taaja.models.message.extension.operation.SpatialEntityOperation;
-import io.taaja.models.record.spatial.*;
-import io.taaja.models.views.SpatialRecordView;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.util.*;
-
-import static io.taaja.models.record.spatial.ExtensionPriority.MAX_PRIORITY;
 
 class ModelTest {
 
