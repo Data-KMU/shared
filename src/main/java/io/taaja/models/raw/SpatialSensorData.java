@@ -22,6 +22,8 @@ public class SpatialSensorData extends SensorData {
         spatialSensorData.setAltitude(sensorData.getAltitude());
         spatialSensorData.setLatitude(sensorData.getLatitude());
         spatialSensorData.setLongitude(sensorData.getLongitude());
+        spatialSensorData.setElevation(sensorData.getElevation());
+        spatialSensorData.setOriginId(sensorData.getOriginId());
         spatialSensorData.setIntersectingSpatialEntities(intersectingSpatialEntitiesIds);
         return spatialSensorData;
     }

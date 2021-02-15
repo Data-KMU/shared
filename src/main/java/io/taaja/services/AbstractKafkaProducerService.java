@@ -6,6 +6,7 @@ import io.taaja.kafka.JacksonSerializer;
 import io.taaja.kafka.Topics;
 import io.taaja.models.message.KafkaMessage;
 import io.taaja.models.record.spatial.SpatialEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.jbosslog.JBossLog;
 import org.apache.kafka.clients.producer.*;
@@ -22,7 +23,6 @@ import java.util.concurrent.Future;
  * Deprecated: use smallrye
  */
 @JBossLog
-@Getter
 @Deprecated
 public abstract class AbstractKafkaProducerService extends AbstractService {
 
@@ -68,7 +68,8 @@ public abstract class AbstractKafkaProducerService extends AbstractService {
         );
     }
 
-    protected String getOriginID(){
+    //overwrite if needed
+    public String getOriginID(){
         return UUID.randomUUID().toString();
     }
 
